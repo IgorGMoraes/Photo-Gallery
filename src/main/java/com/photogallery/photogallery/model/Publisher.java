@@ -1,4 +1,4 @@
-package com.photogallery.photogallery.Model;
+package com.photogallery.photogallery.model;
 
 public class Publisher {
 
