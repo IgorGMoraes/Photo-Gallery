@@ -3,12 +3,16 @@ package com.photogallery.photogallery.controller;
 import com.photogallery.photogallery.model.DBFile;
 import com.photogallery.photogallery.payload.UploadFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,15 +42,18 @@ public class FileController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/downloadFile/{fileId}")
-//    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
-//        // Load file from database
-//        DBFile dbFile = DBFileStorageService.getFile(fileId);
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
-//                .body(new ByteArrayResource(dbFile.getData()));
-//    }
+
+    @GetMapping("/downloadFile/{fileId}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+        // Load file from database
+        DBFile dbFile = DBFileStorageService.getFile(fileId);
+
+        byte[] data = Base64.getDecoder().decode(dbFile.getData());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+                .body(new ByteArrayResource(data));
+    }
 
 }

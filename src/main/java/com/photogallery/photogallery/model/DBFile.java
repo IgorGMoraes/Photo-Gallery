@@ -17,13 +17,13 @@ public class DBFile {
     private String fileType;
 
     @Lob
-    private byte[] data;
+    private String data;
 
     public DBFile() {
 
     }
 
-    public DBFile(String fileName, String fileType, byte[] data) {
+    public DBFile(String fileName, String fileType, String data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
@@ -53,11 +53,11 @@ public class DBFile {
         this.fileType = fileType;
     }
 
-    public byte[] getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
