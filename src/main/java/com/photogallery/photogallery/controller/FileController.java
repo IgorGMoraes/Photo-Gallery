@@ -38,7 +38,7 @@ public class FileController {
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file))
+                .map(this::uploadFile)
                 .collect(Collectors.toList());
     }
 
