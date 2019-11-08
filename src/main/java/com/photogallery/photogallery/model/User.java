@@ -1,11 +1,14 @@
 package com.photogallery.photogallery.model;
 
+import com.photogallery.photogallery.controller.Album;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 public class User {
@@ -18,8 +21,10 @@ public class User {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @NotBlank(message = "Label is mandatory")
     private String label;
+
+    @OneToMany
+    private List<Album> albums;
 
     public User() {}
 
