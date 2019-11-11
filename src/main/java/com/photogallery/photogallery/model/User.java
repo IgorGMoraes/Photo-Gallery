@@ -1,12 +1,8 @@
 package com.photogallery.photogallery.model;
 
-import com.photogallery.photogallery.controller.Album;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -23,7 +19,7 @@ public class User {
 
     private String label;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Album> albums;
 
     public User() {}

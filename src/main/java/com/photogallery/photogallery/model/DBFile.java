@@ -19,6 +19,9 @@ public class DBFile {
     @Lob
     private String data;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Album album;
+
     public DBFile() {
 
     }

@@ -1,12 +1,10 @@
-package com.photogallery.photogallery.controller;
+package com.photogallery.photogallery.model;
 
 import com.photogallery.photogallery.model.User;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Album {
@@ -18,8 +16,11 @@ public class Album {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
+    private List<DBFile> dbFile;
 
     public String getId() {
         return id;

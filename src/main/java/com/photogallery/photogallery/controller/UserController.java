@@ -1,16 +1,28 @@
 package com.photogallery.photogallery.controller;
 
+import com.photogallery.photogallery.model.Album;
+import com.photogallery.photogallery.model.DBFile;
 import com.photogallery.photogallery.model.User;
+import com.photogallery.photogallery.payload.UploadFileResponse;
 import com.photogallery.photogallery.repository.AlbumRepository;
+import com.photogallery.photogallery.repository.DBFileRepository;
 import com.photogallery.photogallery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -20,6 +32,8 @@ public class UserController {
 
     @Autowired
     private AlbumRepository albumRepository;
+
+    @Autowired DBFileRepository dbFileRepository;
 
     //Show new user form
     @GetMapping("/signup")
@@ -65,17 +79,80 @@ public class UserController {
 
 
     //#######################  ALBUM CONTROLLER  #######################
-    @GetMapping("/publishersList/{id}/addalbum")
+    @GetMapping("/publishersList/{id}/addAlbum")
     public String showNewAlbumForm(@PathVariable("id") String id){
         return "add-album";
     }
 
-    @PostMapping("/publishersList/{id}/addalbum")
+    @PostMapping("/publishersList/{id}/addAlbum")
     public String addAlbum(@PathVariable("id") String id, Album album){
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         album.setUser(user);
         albumRepository.save(album);
         return "redirect:/publishersList/{id}";
     }
+
+    @GetMapping("/publishersList/{idUser}/{idAlbum}")
+    public ModelAndView showPhotoPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum){
+        User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
+        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idAlbum));
+
+        ModelAndView mv = new ModelAndView("album");
+        mv.addObject("user", user);
+        mv.addObject("album", album);
+
+        Iterable<DBFile> photos = dbFileRepository.findAllByAlbum(album);
+        mv.addObject("photos", photos);
+        return mv;
+    }
+
+    @GetMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
+    public String showNewPhotoForm(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum){
+        return "static/add-photo";
+    }
+
+
+
+
+
+
+    ///////////////////////////// PHOTO CONTROLLER  //////////////////////////////////////////
+    @Autowired
+    private com.photogallery.photogallery.service.DBFileStorageService DBFileStorageService;
+
+    @PostMapping("/uploadFile")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        DBFile dbFile = DBFileStorageService.storeFile(file);
+
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/downloadFile/")
+//                .path(dbFile.getId())
+//                .toUriString();
+
+        return new UploadFileResponse(dbFile.getFileName(), file.getContentType(), file.getSize());
+    }
+
+    @PostMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum) {
+        return Arrays.asList(files)
+                .stream()
+                .map(this::uploadFile)
+                .collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/downloadFile/{fileId}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+        // Load file from database
+        DBFile dbFile = DBFileStorageService.getFile(fileId);
+
+        byte[] data = Base64.getDecoder().decode(dbFile.getData());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+                .body(new ByteArrayResource(data));
+    }
+
 
 }

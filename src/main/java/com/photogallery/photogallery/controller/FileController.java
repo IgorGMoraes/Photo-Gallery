@@ -16,44 +16,44 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-public class FileController {
-
-    @Autowired
-    private com.photogallery.photogallery.service.DBFileStorageService DBFileStorageService;
-
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        DBFile dbFile = DBFileStorageService.storeFile(file);
-
-//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path("/downloadFile/")
-//                .path(dbFile.getId())
-//                .toUriString();
-
-        return new UploadFileResponse(dbFile.getFileName(), file.getContentType(), file.getSize());
-    }
-
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(this::uploadFile)
-                .collect(Collectors.toList());
-    }
-
-
-    @GetMapping("/downloadFile/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
-        // Load file from database
-        DBFile dbFile = DBFileStorageService.getFile(fileId);
-
-        byte[] data = Base64.getDecoder().decode(dbFile.getData());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
-                .body(new ByteArrayResource(data));
-    }
-
-}
+//@RestController
+//public class FileController {
+//
+//    @Autowired
+//    private com.photogallery.photogallery.service.DBFileStorageService DBFileStorageService;
+//
+//    @PostMapping("/uploadFile")
+//    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+//        DBFile dbFile = DBFileStorageService.storeFile(file);
+//
+////        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+////                .path("/downloadFile/")
+////                .path(dbFile.getId())
+////                .toUriString();
+//
+//        return new UploadFileResponse(dbFile.getFileName(), file.getContentType(), file.getSize());
+//    }
+//
+//    @PostMapping("/uploadMultipleFiles")
+//    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        return Arrays.asList(files)
+//                .stream()
+//                .map(this::uploadFile)
+//                .collect(Collectors.toList());
+//    }
+//
+//
+//    @GetMapping("/downloadFile/{fileId}")
+//    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+//        // Load file from database
+//        DBFile dbFile = DBFileStorageService.getFile(fileId);
+//
+//        byte[] data = Base64.getDecoder().decode(dbFile.getData());
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+//                .body(new ByteArrayResource(data));
+//    }
+//
+//}
