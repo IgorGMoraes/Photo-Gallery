@@ -154,5 +154,4 @@ public class UserController {
                 .body(new ByteArrayResource(data));
     }
 
-
 }
