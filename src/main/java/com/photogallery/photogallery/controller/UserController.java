@@ -7,6 +7,7 @@ import com.photogallery.photogallery.payload.UploadFileResponse;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.DBFileRepository;
 import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.service.DBFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -93,9 +94,9 @@ public class UserController {
     }
 
     @GetMapping("/publishersList/{idUser}/{idAlbum}")
-    public ModelAndView showPhotoPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum){
+    public ModelAndView showPhotoPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
         User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
-        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idAlbum));
+        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
         ModelAndView mv = new ModelAndView("album");
         mv.addObject("user", user);
@@ -108,7 +109,7 @@ public class UserController {
 
     @GetMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
     public String showNewPhotoForm(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum){
-        return "static/add-photo";
+        return "add-photo";
     }
 
 
@@ -118,40 +119,48 @@ public class UserController {
 
     ///////////////////////////// PHOTO CONTROLLER  //////////////////////////////////////////
     @Autowired
-    private com.photogallery.photogallery.service.DBFileStorageService DBFileStorageService;
+    DBFileStorageService dbFileStorageService;
 
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        DBFile dbFile = DBFileStorageService.storeFile(file);
+    public UploadFileResponse uploadFile(MultipartFile file) {
+        DBFile dbFile = dbFileStorageService.storeFile(file);
 
 //        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 //                .path("/downloadFile/")
 //                .path(dbFile.getId())
 //                .toUriString();
 
-        return new UploadFileResponse(dbFile.getFileName(), file.getContentType(), file.getSize());
+        return new UploadFileResponse(dbFile.getFileName(), file.   getContentType(), file.getSize());
     }
 
     @PostMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum) {
-        return Arrays.asList(files)
+    public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
+        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
+
+
+        ModelAndView mv = new ModelAndView("photo");
+        mv.addObject("user", user);
+        mv.addObject("album", album);
+
+        Arrays.asList(files)
                 .stream()
-                .map(this::uploadFile)
-                .collect(Collectors.toList());
+                .forEach(file -> uploadFile(file));
+
+        return "redirect:/publishersList/{idUser}/{idAlbum}";
     }
 
 
-    @GetMapping("/downloadFile/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
-        // Load file from database
-        DBFile dbFile = DBFileStorageService.getFile(fileId);
-
-        byte[] data = Base64.getDecoder().decode(dbFile.getData());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
-                .body(new ByteArrayResource(data));
-    }
+//    @GetMapping("/downloadFile/{fileId}")
+//    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+//        // Load file from database
+//        DBFile dbFile = dbFileStorageService.getFile(fileId);
+//
+//        byte[] data = Base64.getDecoder().decode(dbFile.getData());
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+//                .body(new ByteArrayResource(data));
+//    }
 
 }
