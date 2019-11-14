@@ -26,10 +26,11 @@ public class DBFile {
 
     }
 
-    public DBFile(String fileName, String fileType, String data) {
+    public DBFile(String fileName, String fileType, String data, Album album) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
+        this.album = album;
     }
 
     public String getId() {

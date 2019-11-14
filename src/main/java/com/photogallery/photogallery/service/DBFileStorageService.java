@@ -1,6 +1,7 @@
 package com.photogallery.photogallery.service;
 
 
+import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.DBFile;
 import com.photogallery.photogallery.exeption.FileStorageException;
 import com.photogallery.photogallery.exeption.MyFileNotFoundException;
@@ -19,7 +20,7 @@ public class DBFileStorageService {
     @Autowired
     private DBFileRepository dbFileRepository;
 
-    public DBFile storeFile(MultipartFile file) {
+    public DBFile storeFile(MultipartFile file, Album album) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -32,7 +33,7 @@ public class DBFileStorageService {
             //Convert the file bytes to base64 string
             String encodedString = Base64.getEncoder().encodeToString(file.getBytes());
 
-            DBFile dbFile = new DBFile(fileName, file.getContentType(), encodedString);
+            DBFile dbFile = new DBFile(fileName, file.getContentType(), encodedString, album);
 
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {

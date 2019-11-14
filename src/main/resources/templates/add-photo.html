@@ -16,7 +16,8 @@
     <div class="upload-content">
         <div class="multiple-upload">
             <h3>Upload Multiple Files</h3>
-            <form method="POST" th:action="@{/publishersList/{idUser}/{idAlbum}/addPhoto (idUser = ${user.id}, idAlbum = ${album.id})}" enctype="multipart/form-data">
+            <form method="POST" th:action="@{/publishersList/{idUser}/{idAlbum}/addPhoto (idUser = ${idUser}, idAlbum = ${idAlbum})}" enctype="multipart/form-data">
+<!--            <form method="POST" th:action="@{/publishersList/{idUser}/{idAlbum}/addPhoto (idUser = ${user.id}, idAlbum = ${album.id})}" enctype="multipart/form-data">-->
                 <input type="file" name="files" multiple/> <br/><br/>
                 <button type="submit">Submit</button>
             </form>

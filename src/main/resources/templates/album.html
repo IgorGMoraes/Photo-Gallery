@@ -36,6 +36,11 @@
             <a th:text="${album.title}" th:href="@{/publishersList/{idUser}/{idAlbum} (idUser = ${user.id}, idAlbum = ${album.id})}" ></a>
         </div>
 
+        <div th:each="photo : ${photos}" th:inline="text" >
+<!--            <img src="data:image/png;base64, [[${(#mvc.url('FC#getFile').arg(0, photo.id)).build()}]] "/>-->
+            <div th:text="${(#mvc.url('FC#getFile')).build()} "></div>
+        </div>
+
     </div>
 
 
