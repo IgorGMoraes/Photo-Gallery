@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "files")
-public class DBFile {
+public class Photo {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -19,18 +19,23 @@ public class DBFile {
     @Lob
     private String data;
 
+    private int views;
+
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
 
-    public DBFile() {
+    public Photo() {
 
     }
 
-    public DBFile(String fileName, String fileType, String data, Album album) {
+    public Photo(String fileName, String fileType, String data, Album album) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
         this.album = album;
+        views = 0;
     }
 
     public String getId() {
@@ -63,5 +68,21 @@ public class DBFile {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

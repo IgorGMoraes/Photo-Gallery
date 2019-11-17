@@ -20,7 +20,7 @@ public class Album {
     private User user;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    private List<DBFile> dbFile;
+    private List<Photo> photo;
 
     public String getId() {
         return id;

@@ -2,10 +2,10 @@ package com.photogallery.photogallery.service;
 
 
 import com.photogallery.photogallery.model.Album;
-import com.photogallery.photogallery.model.DBFile;
+import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.exeption.FileStorageException;
 import com.photogallery.photogallery.exeption.MyFileNotFoundException;
-import com.photogallery.photogallery.repository.DBFileRepository;
+import com.photogallery.photogallery.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,12 +15,12 @@ import java.io.IOException;
 import java.util.Base64;
 
 @Service
-public class DBFileStorageService {
+public class PhotoStorageService {
 
     @Autowired
-    private DBFileRepository dbFileRepository;
+    private PhotoRepository photoRepository;
 
-    public DBFile storeFile(MultipartFile file, Album album) {
+    public Photo storeFile(MultipartFile file, Album album) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -33,16 +33,16 @@ public class DBFileStorageService {
             //Convert the file bytes to base64 string
             String encodedString = Base64.getEncoder().encodeToString(file.getBytes());
 
-            DBFile dbFile = new DBFile(fileName, file.getContentType(), encodedString, album);
+            Photo photo = new Photo(fileName, file.getContentType(), encodedString, album);
 
-            return dbFileRepository.save(dbFile);
+            return photoRepository.save(photo);
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
-    public DBFile getFile(String fileId) {
-        return dbFileRepository.findById(fileId)
+    public Photo getFile(String fileId) {
+        return photoRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }
 }

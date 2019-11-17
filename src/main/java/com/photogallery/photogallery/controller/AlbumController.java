@@ -1,10 +1,10 @@
 package com.photogallery.photogallery.controller;
 
 import com.photogallery.photogallery.model.Album;
-import com.photogallery.photogallery.model.DBFile;
+import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.model.User;
 import com.photogallery.photogallery.repository.AlbumRepository;
-import com.photogallery.photogallery.repository.DBFileRepository;
+import com.photogallery.photogallery.repository.PhotoRepository;
 import com.photogallery.photogallery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class AlbumController {
     private AlbumRepository albumRepository;
 
     @Autowired
-    DBFileRepository dbFileRepository;
+    PhotoRepository photoRepository;
 
     @PostMapping("/publishersList/{id}/addAlbum")
     public String addAlbum(@PathVariable("id") String id, Album album){
@@ -43,13 +43,9 @@ public class AlbumController {
         mv.addObject("user", user);
         mv.addObject("album", album);
 
-        Iterable<DBFile> photos = dbFileRepository.findAllByAlbum(album);
+        Iterable<Photo> photos = photoRepository.findAllByAlbum(album);
         mv.addObject("photos", photos);
         return mv;
     }
 
-    @GetMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
-    public String showNewPhotoForm(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum){
-        return "add-photo";
-    }
 }
