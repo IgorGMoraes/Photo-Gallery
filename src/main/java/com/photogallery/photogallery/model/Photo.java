@@ -1,11 +1,16 @@
 package com.photogallery.photogallery.model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "files")
+@Table(name = "photos")
 public class Photo {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -19,9 +24,11 @@ public class Photo {
     @Lob
     private String data;
 
+    private LocalDateTime date;
+
+    private long time;
+
     private int views;
-
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
@@ -36,6 +43,8 @@ public class Photo {
         this.data = data;
         this.album = album;
         views = 0;
+        time = Instant.now().getEpochSecond();
+        date = LocalDateTime.now();
     }
 
     public String getId() {
@@ -85,4 +94,21 @@ public class Photo {
     public void setViews(int views) {
         this.views = views;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
 }

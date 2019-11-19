@@ -3,8 +3,8 @@ package com.photogallery.photogallery.service;
 
 import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
-import com.photogallery.photogallery.exeption.FileStorageException;
-import com.photogallery.photogallery.exeption.MyFileNotFoundException;
+import com.photogallery.photogallery.exception.FileStorageException;
+import com.photogallery.photogallery.exception.MyFileNotFoundException;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

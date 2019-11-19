@@ -30,7 +30,7 @@
         <h3 th:text="${user.name}" class="font-weight-bold"></h3>
         <h5 th:text="${#strings.capitalize(user.label)}" class="text-secondary"></h5>
 
-        <p class="mt-5"><a th:href="${(#mvc.url('UC#showNewAlbumForm').arg(0, user.id)).build()}" class="btn btn-primary btn-sm">Add album<i class="fas fa-folder-plus ml-2"></i></a></p>
+        <p class="mt-5"><a th:href="${(#mvc.url('UC#showNewAlbumForm').arg(0, user.id)).build()}" class="btn btn-primary btn-sm"><i class="fas fa-folder-plus ml-2"> </i> Add album</a></p>
 
         <div th:each="album : ${albums}" >
             <a th:text="${album.title}" th:href="@{/publishersList/{idUser}/{idAlbum} (idUser = ${user.id}, idAlbum = ${album.id})}" ></a>

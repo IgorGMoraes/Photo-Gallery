@@ -16,6 +16,8 @@ public class Album {
 
     private String title;
 
+    private int views = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -36,6 +38,14 @@ public class Album {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 
     public User getUser() {

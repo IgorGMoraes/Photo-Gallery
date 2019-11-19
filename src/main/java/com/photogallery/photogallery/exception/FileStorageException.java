@@ -1,4 +1,4 @@
-package com.photogallery.photogallery.exeption;
+package com.photogallery.photogallery.exception;
 
 public class FileStorageException extends RuntimeException {
     public FileStorageException(String message) {

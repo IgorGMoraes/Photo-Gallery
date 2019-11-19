@@ -27,7 +27,7 @@
     <div class="container">
 
         <h2 class="my-5">Users</h2>
-        <p class="mt-5"><a href="/signup" class="btn btn-primary">Add user<i class="fas fa-user-plus ml-2"></i></a></p>
+        <p class="mt-5"><a href="/signup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i> Add user</a></p>
         <h4 class="text-center" th:if="${#lists.isEmpty(users)}">No users registered</h4>
         <div th:unless="${#lists.isEmpty(users)}">
             <table class="table table-striped">
@@ -35,14 +35,14 @@
                 <tr>
                     <th>Name</th>
                     <th>Label</th>
-                    <th>Delete</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="user : ${users}">
                     <td><a th:text="${user.name}" th:href="@{/publishersList/{id}(id = ${user.id})}"></a></td>
                     <td th:text="${#strings.capitalize(user.label)}"></td>
-                    <td><a th:href="${(#mvc.url('UC#deleteUser').arg(0, user.id)).build()}" class="btn btn-primary btn-sm"><i class="fas fa-user-times"></i></a></td>
+                    <td><a th:href="${(#mvc.url('UC#deleteUser').arg(0, user.id)).build()}" class="btn btn-danger btn-sm"><i class="fas fa-user-times"></i> Delete</a></td>
                 </tr>
                 </tbody>
             </table>

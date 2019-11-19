@@ -34,7 +34,6 @@ public class PhotoController {
         User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
-
         ModelAndView mv = new ModelAndView("photo");
         mv.addObject("user", user);
         mv.addObject("album", album);
@@ -46,12 +45,27 @@ public class PhotoController {
         return "redirect:/publishersList/{idUser}/{idAlbum}";
     }
 
-    @RequestMapping("/addView")
-    public String addView(String id){
+    @GetMapping("/p/{id}")
+    public ModelAndView showPhoto(@PathVariable("id") String id){
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
-        int views = photo.getViews();
-        photo.setViews(views + 1);
+        ModelAndView mv = new ModelAndView("photo");
+        mv.addObject("photo", photo);
+
+        int photoViews = photo.getViews();
+        photo.setViews(photoViews + 1);
+
+        int albumViews = photo.getAlbum().getViews();
+        photo.getAlbum().setViews(albumViews + 1);
+
         photoRepository.save(photo);
-        return "redirect:/publishersList";
+        albumRepository.save(photo.getAlbum());
+        return mv;
+    }
+
+    @GetMapping("/deletePhoto/{idUser}/{idAlbum}/{idPhoto}")
+    public String deletePhoto(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @PathVariable("idPhoto") String idPhoto) {
+        Photo photo = photoRepository.findById(idPhoto).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idPhoto));
+        photoRepository.delete(photo);
+        return "redirect:/publishersList/{idUser}/{idAlbum}";
     }
 }
