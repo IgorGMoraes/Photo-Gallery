@@ -9,7 +9,7 @@
 </head>
 <body class="pt-5">
     <nav class="navbar navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand font-weight-bold" href="#">Travelers Group</a>
+        <a class="navbar-brand font-weight-bold" href="http://localhost:8080/">Travelers Group</a>
         <form class="form-inline" method="get" th:action="@{/search}">
             <input class="form-control mr-sm-2" type="search" placeholder="Search albums and photos" aria-label="Search" name="tag" th:value="${tag}">
             <button class="btn btn-primary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
@@ -26,28 +26,7 @@
         </div>
     </nav>
 
-    <h1 class="display-4 text-center font-weight-bold mt-4">Best of Travelers Group</h1>
-    <h4 class="text-center">Trending photos of this week</h4>
-    <div class="container-fluid mt-4">
-        <div class="row d-flex justify-content-center">
-            <div class="text-center col-3 " th:each="photo : ${photoTrends}">
-                <a th:href="@{/p/{id} (id = ${photo.id})}">
-                    <img class="myImg"
-                         th:src="@{data:{fileType};base64,{data} (fileType = ${photo.fileType}, data = ${photo.data})}"
-                         style="width: 100%; height: calc(100% - 60px); object-fit:cover"/>
-                </a>
-                <div class="d-flex justify-content-between mt-2">
-                    <h6 class="font-weight-bold" th:text="${photo.album.user.name}"></h6>
-                    <div>
-                        <i class="fas fa-eye text-secondary d-inline"></i>
-                        <h6 class="text-secondary d-inline" th:text="${photo.views}"></h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <h1 class="text-center font-weight-bold mt-5">Recently added</h1>
+    <h4 class="text-secondary ml-3 mt-5" th:text="${#lists.size(photos)} + ' results to ' + ${tag}"></h4>
     <div class="container-fluid mt-4" >
         <div class="row">
             <div class="text-center col-lg-2 col-md-4" th:each="photo : ${photos}">
@@ -70,7 +49,7 @@
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

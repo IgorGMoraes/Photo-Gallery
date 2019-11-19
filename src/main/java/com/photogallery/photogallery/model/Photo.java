@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "photos")
@@ -33,9 +35,17 @@ public class Photo {
     @ManyToOne(fetch = FetchType.LAZY)
     private Album album;
 
-    public Photo() {
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "post_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
-    }
+    public Photo() {}
 
     public Photo(String fileName, String fileType, String data, Album album) {
         this.fileName = fileName;
@@ -45,6 +55,10 @@ public class Photo {
         views = 0;
         time = Instant.now().getEpochSecond();
         date = LocalDateTime.now();
+        Tag tag = new Tag();
+        tag.setName(album.getTitle());
+
+        tags.add(tag);
     }
 
     public String getId() {
@@ -111,4 +125,11 @@ public class Photo {
         this.time = time;
     }
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 }
