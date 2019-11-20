@@ -31,6 +31,9 @@
         <img
                 th:src="@{data:{fileType};base64,{data} (fileType = ${photo.fileType}, data = ${photo.data})}"
                 style="width: 100%";/>
+        <div class="mt-2">
+            <h6><span th:each="tag : ${photo.tags}" class="badge badge-light border mx-1" th:text="${tag.name}"></span></h6>
+        </div>
         <div class="mt-2 d-flex justify-content-between">
             <div>
                 <h5 th:text="${#strings.capitalize(photo.album.user.name)}" class="font-weight-bold"></h5>

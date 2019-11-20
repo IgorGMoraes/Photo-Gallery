@@ -55,8 +55,7 @@ public class Photo {
         views = 0;
         time = Instant.now().getEpochSecond();
         date = LocalDateTime.now();
-        Tag tag = new Tag();
-        tag.setName(album.getTitle());
+        Tag tag = new Tag(album.getTitle());
 
         tags.add(tag);
     }

@@ -35,7 +35,7 @@ public class AlbumController {
     }
 
     @GetMapping("/publishersList/{idUser}/{idAlbum}")
-    public ModelAndView showPhotoPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
+    public ModelAndView showAlbumPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
         User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 

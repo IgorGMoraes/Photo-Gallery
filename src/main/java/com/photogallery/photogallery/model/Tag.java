@@ -21,6 +21,12 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Set<Photo> photos = new HashSet<>();
 
+    public Tag(String name) {
+        this.name = name;
+    }
+
+    public Tag() {}
+
     public String getId() {
         return id;
     }
