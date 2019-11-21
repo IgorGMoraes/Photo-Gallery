@@ -2,6 +2,7 @@ package com.photogallery.photogallery.controller;
 
 import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
+import com.photogallery.photogallery.model.Tag;
 import com.photogallery.photogallery.model.User;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.PhotoRepository;
@@ -30,6 +31,8 @@ public class AlbumController {
     public String addAlbum(@PathVariable("id") String id, Album album){
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         album.setUser(user);
+        Tag tag = new Tag(album.getTitle());
+        album.getTags().add(tag);
         albumRepository.save(album);
         return "redirect:/publishersList/{id}";
     }

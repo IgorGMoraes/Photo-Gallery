@@ -12,7 +12,7 @@
 
 </head>
 
-<body class="pt-5">
+<body class="pt-2">
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <a class="navbar-brand font-weight-bold" href="http://localhost:8080/">Travelers Group</a>
         <div class="nav-item dropdown">
@@ -27,10 +27,32 @@
         </div>
     </nav>
 
+    <nav aria-label="breadcrumb" class="mt-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="http://localhost:8080/">Home</a></li>
+            <li class="breadcrumb-item"><a href="../">Publishers List</a></li>
+            <li class="breadcrumb-item"><a href="./">Publisher</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Album</li>
+        </ol>
+    </nav>
+
     <div class="container mt-5">
 
         <h3 th:text="${album.title}" class="font-weight-bold"></h3>
         <h5 th:text="${#strings.capitalize(user.name)}" class="text-secondary"></h5>
+
+        <div class="mt-2">
+            <h5><span th:each="tag : ${album.tags}" class="badge badge-light border mx-1" th:text="${tag.name}"></span></h5>
+        </div>
+
+        <form method="post" th:action="@{/addAlbumTag/{id}/{idUser}/{idAlbum} (id = ${album.id}, idUser = ${user.id}, idAlbum = ${album.id})}">
+            <div class="input-group input-group-sm mt-2 col-sm-2 pl-0">
+                <input type="text" class="form-control" placeholder="Insert a tag" aria-label="Insert a tag" aria-describedby="basic-addon2" name="tagName" th:value="${tagName}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </form>
 
         <form method="POST" th:action="@{/publishersList/{idUser}/{idAlbum}/addPhoto (idUser = ${idUser}, idAlbum = ${idAlbum})}" enctype="multipart/form-data" class="mt-5">
             <label>Add new photos</label>
@@ -67,7 +89,7 @@
                 </div>
 
 
-                <form method="post" th:action="@{/addTag/{id}/{idUser}/{idAlbum} (id = ${photo.id}, idUser = ${user.id}, idAlbum = ${album.id})}">
+                <form method="post" th:action="@{/addPhotoTag/{id}/{idUser}/{idAlbum} (id = ${photo.id}, idUser = ${user.id}, idAlbum = ${album.id})}">
                     <div class="input-group input-group-sm mt-2">
                         <input type="text" class="form-control" placeholder="Insert a tag" aria-label="Insert a tag" aria-describedby="basic-addon2" name="tagName" th:value="${tagName}">
                         <div class="input-group-append">

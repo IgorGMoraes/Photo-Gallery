@@ -11,4 +11,7 @@ import java.util.List;
 public interface AlbumRepository extends CrudRepository<Album, String> {
     Iterable<Album> findAllByUser(User user);
     List<Album> findFirst4ByOrderByViewsDesc();
+
+    List<Album> findByTags_Name(String tag);
+
 }

@@ -4,7 +4,9 @@ import com.photogallery.photogallery.model.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Album {
@@ -23,6 +25,20 @@ public class Album {
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Photo> photo;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "album_tag",
+            joinColumns = @JoinColumn(name = "album_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
+
+
+
+
 
     public String getId() {
         return id;
@@ -54,5 +70,21 @@ public class Album {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Photo> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(List<Photo> photo) {
+        this.photo = photo;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }

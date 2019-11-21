@@ -39,8 +39,8 @@ public class Photo {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "post_tag",
-            joinColumns = @JoinColumn(name = "post_id"),
+    @JoinTable(name = "photo_tag",
+            joinColumns = @JoinColumn(name = "photo_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();

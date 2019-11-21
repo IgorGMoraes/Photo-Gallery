@@ -56,6 +56,9 @@ public class IndexController {
         ModelAndView mv = new ModelAndView("results");
 
         Iterable<Photo> photos = photoRepository.findByTags_Name(tag);
+        Iterable<Album> albums = albumRepository.findByTags_Name(tag);
+
+        mv.addObject("albums", albums);
         mv.addObject("photos", photos);
         mv.addObject("tag", tag);
         return mv;

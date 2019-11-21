@@ -21,6 +21,9 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Set<Photo> photos = new HashSet<>();
 
+    @ManyToMany(mappedBy = "tags")
+    private Set<Album> albums = new HashSet<>();
+
     public Tag(String name) {
         this.name = name;
     }
