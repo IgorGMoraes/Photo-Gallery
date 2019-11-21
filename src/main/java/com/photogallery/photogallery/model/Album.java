@@ -1,6 +1,5 @@
 package com.photogallery.photogallery.model;
 
-import com.photogallery.photogallery.model.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -24,7 +23,7 @@ public class Album {
     private User user;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    private List<Photo> photo;
+    private List<Photo> photos;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -73,11 +72,11 @@ public class Album {
     }
 
     public List<Photo> getPhoto() {
-        return photo;
+        return photos;
     }
 
     public void setPhoto(List<Photo> photo) {
-        this.photo = photo;
+        this.photos = photo;
     }
 
     public Set<Tag> getTags() {

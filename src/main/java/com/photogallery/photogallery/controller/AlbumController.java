@@ -38,7 +38,7 @@ public class AlbumController {
     }
 
     @GetMapping("/publishersList/{idUser}/{idAlbum}")
-    public ModelAndView showAlbumPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
+    public ModelAndView showPublisherAlbumPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
         User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
@@ -48,6 +48,20 @@ public class AlbumController {
 
         Iterable<Photo> photos = photoRepository.findAllByAlbum(album);
         mv.addObject("photos", photos);
+        return mv;
+    }
+
+
+    @GetMapping("/a/{idAlbum}")
+    public ModelAndView showAlbumPage(@PathVariable("idAlbum") String idAlbum, Model model){
+        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
+
+        ModelAndView mv = new ModelAndView("album");
+        mv.addObject("album", album);
+
+        Iterable<Photo> photos = photoRepository.findAllByAlbum(album);
+        mv.addObject("photos", photos);
+
         return mv;
     }
 

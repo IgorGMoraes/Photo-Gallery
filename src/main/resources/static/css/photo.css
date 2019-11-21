@@ -1,0 +1,22 @@
+body{
+    background-color: black;
+}
+
+.btn{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+}
+
+img{
+    height: calc(100% - 96px);
+    max-width: 100vw;
+    object-fit: cover;
+}
+.photo{
+    height: 100vh;
+}
+
+.info{
+    background-color: white;
+}

@@ -48,9 +48,9 @@ public class TagController {
         return "redirect:/publishersList/{idUser}/{idAlbum}";
     }
 
-    @PostMapping("/addalbumTag/{id}/{idUser}/{idAlbum}")
-    public String addAlbumTag(@PathVariable("id") String id, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
-        Album album = albumRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
+    @PostMapping("/addAlbumTag/{idUser}/{idAlbum}")
+    public String addAlbumTag(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
+        Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
         Set<Tag> tags = album.getTags();
         Tag tag = new Tag(tagName);

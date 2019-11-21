@@ -23,7 +23,7 @@ public class UserController {
     //Show new user form
     @GetMapping("/signup")
     public String showSignUpForm(){
-        return "add-user";
+        return "addUser";
     }
 
     //Save new user
@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping("/publishersList/{id}/addAlbum")
     public String showNewAlbumForm(@PathVariable("id") String id){
-        return "add-album";
+        return "addAlbum";
     }
 
 }
