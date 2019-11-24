@@ -5,6 +5,7 @@ import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.exception.FileStorageException;
 import com.photogallery.photogallery.exception.MyFileNotFoundException;
+import com.photogallery.photogallery.model.Tag;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class PhotoStorageService {
     @Autowired
     private PhotoRepository photoRepository;
 
-    public Photo storeFile(MultipartFile file, Album album) {
+    public Photo storeFile(MultipartFile file, Album album, Tag tag) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -34,6 +35,7 @@ public class PhotoStorageService {
             String encodedString = Base64.getEncoder().encodeToString(file.getBytes());
 
             Photo photo = new Photo(fileName, file.getContentType(), encodedString, album);
+            photo.getTags().add(tag);
 
             return photoRepository.save(photo);
         } catch (IOException ex) {

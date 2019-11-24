@@ -21,13 +21,13 @@ public class UserController {
     private AlbumRepository albumRepository;
 
     //Show new user form
-    @GetMapping("/signup")
+    @GetMapping("/publisherSignup")
     public String showSignUpForm(){
         return "addUser";
     }
 
     //Save new user
-    @PostMapping("/signup")
+    @PostMapping("/publisherSignup")
     public String addUser(User user){
         userRepository.save(user);
         return "redirect:/publishersList";

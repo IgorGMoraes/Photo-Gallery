@@ -1,9 +1,0 @@
-.album{
-    background-image: url("https://www.pinclipart.com/picdir/big/460-4608361_album-svg-png-icon-free-download-album-foto.png");
-    height: calc(100% - 60px);
-    width: 100%;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: .8;
-}

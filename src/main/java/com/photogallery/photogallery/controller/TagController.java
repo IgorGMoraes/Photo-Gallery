@@ -39,10 +39,12 @@ public class TagController {
     public String addPhotoTag(@PathVariable("id") String id, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
 
-        Set<Tag> tags = photo.getTags();
-        Tag tag = new Tag(tagName);
-        photo.getTags().add(tag);
+        Tag tag = tagRepository.findByName(tagName);
+        if (tag == null){
+            tag = new Tag(tagName);
+        }
 
+        photo.getTags().add(tag);
         photoRepository.save(photo);
 
         return "redirect:/publishersList/{idUser}/{idAlbum}";
@@ -52,8 +54,11 @@ public class TagController {
     public String addAlbumTag(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
-        Set<Tag> tags = album.getTags();
-        Tag tag = new Tag(tagName);
+        Tag tag = tagRepository.findByName(tagName);
+        if (tag == null){
+            tag = new Tag(tagName);
+        }
+
         album.getTags().add(tag);
 
         albumRepository.save(album);

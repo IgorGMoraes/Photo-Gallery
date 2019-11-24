@@ -1,12 +1,9 @@
 package com.photogallery.photogallery.model;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +42,9 @@ public class Photo {
     )
     private Set<Tag> tags = new HashSet<>();
 
+    @OneToOne
+    private Ad ad;
+
     public Photo() {}
 
     public Photo(String fileName, String fileType, String data, Album album) {
@@ -55,9 +55,6 @@ public class Photo {
         views = 0;
         time = Instant.now().getEpochSecond();
         date = LocalDateTime.now();
-        Tag tag = new Tag(album.getTitle());
-
-        tags.add(tag);
     }
 
     public String getId() {
@@ -130,5 +127,13 @@ public class Photo {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Ad getAd() {
+        return ad;
+    }
+
+    public void setAd(Ad ad) {
+        this.ad = ad;
     }
 }

@@ -36,8 +36,7 @@ public class Album {
     private Set<Tag> tags = new HashSet<>();
 
 
-
-
+    //GETTERS AND SETTERS
 
     public String getId() {
         return id;

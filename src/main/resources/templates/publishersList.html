@@ -34,7 +34,7 @@
     <div class="container">
 
         <h2 class="my-5">Users</h2>
-        <p class="mt-5"><a href="/signup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i> Add user</a></p>
+        <p class="mt-5"><a href="/publisherSignup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i> Add user</a></p>
         <h4 class="text-center" th:if="${#lists.isEmpty(users)}">No users registered</h4>
         <div th:unless="${#lists.isEmpty(users)}">
             <table class="table table-striped">

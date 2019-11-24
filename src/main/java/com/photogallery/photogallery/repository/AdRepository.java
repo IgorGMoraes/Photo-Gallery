@@ -1,12 +1,9 @@
 package com.photogallery.photogallery.repository;
 
-import com.photogallery.photogallery.model.Tag;
+import com.photogallery.photogallery.model.Ad;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface TagRepository extends CrudRepository<Tag, String> {
-    Tag findByName(String name);
+public interface AdRepository extends CrudRepository<Ad, String> {
 }
