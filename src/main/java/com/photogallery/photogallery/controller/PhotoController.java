@@ -3,11 +3,12 @@ package com.photogallery.photogallery.controller;
 import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.model.Tag;
-import com.photogallery.photogallery.model.User;
+import com.photogallery.photogallery.model.Publisher;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import com.photogallery.photogallery.repository.TagRepository;
-import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.repository.PublisherRepository;
+import com.photogallery.photogallery.service.PaymentService;
 import com.photogallery.photogallery.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import java.util.Base64;
 @Controller
 public class PhotoController {
     @Autowired
-    private UserRepository userRepository;
+    private PublisherRepository publisherRepository;
 
     @Autowired
     private AlbumRepository albumRepository;
@@ -34,10 +35,12 @@ public class PhotoController {
     @Autowired
     TagRepository tagRepository;
 
+    @Autowired
+    PaymentService paymentService;
 
-    @PostMapping("/publishersList/{idUser}/{idAlbum}/addPhoto")
-    public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum) {
-        User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
+    @PostMapping("/publishersList/{idPublisher}/{idAlbum}/addPhoto")
+    public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum) {
+        Publisher publisher = publisherRepository.findById(idPublisher).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + idPublisher));
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
         Tag tag = tagRepository.findByName(album.getTitle());
@@ -47,13 +50,13 @@ public class PhotoController {
 
 
         ModelAndView mv = new ModelAndView("photo");
-        mv.addObject("user", user);
+        mv.addObject("publisher", publisher);
         mv.addObject("album", album);
         for (MultipartFile file : Arrays.asList(files)) {
             photoStorageService.storeFile(file, album, tag);
         }
 
-        return "redirect:/publishersList/{idUser}/{idAlbum}";
+        return "redirect:/publishersList/{idPublisher}/{idAlbum}";
     }
 
     @GetMapping("/p/{id}")
@@ -68,15 +71,28 @@ public class PhotoController {
         int albumViews = photo.getAlbum().getViews();
         photo.getAlbum().setViews(albumViews + 1);
 
+        if (photo.getAd() != null) {
+            paymentService.payPublisher(photo.getAlbum().getPublisher(), photo.getAd().getPercentageToPublisher(), photo.getAd().getPrice());
+        }
+
         photoRepository.save(photo);
         albumRepository.save(photo.getAlbum());
         return mv;
     }
 
-    @GetMapping("/deletePhoto/{idUser}/{idAlbum}/{idPhoto}")
-    public String deletePhoto(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @PathVariable("idPhoto") String idPhoto) {
-        Photo photo = photoRepository.findById(idPhoto).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idPhoto));
+    @GetMapping("/pnv/{id}")
+    public ModelAndView showPhotoNoViewCount(@PathVariable("id") String id){
+        Photo photo = photoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
+        ModelAndView mv = new ModelAndView("photo");
+        mv.addObject("photo", photo);
+
+        return mv;
+    }
+
+    @GetMapping("/deletePhoto/{idPublisher}/{idAlbum}/{idPhoto}")
+    public String deletePhoto(@PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum, @PathVariable("idPhoto") String idPhoto) {
+        Photo photo = photoRepository.findById(idPhoto).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + idPhoto));
         photoRepository.delete(photo);
-        return "redirect:/publishersList/{idUser}/{idAlbum}";
+        return "redirect:/publishersList/{idPublisher}/{idAlbum}";
     }
 }

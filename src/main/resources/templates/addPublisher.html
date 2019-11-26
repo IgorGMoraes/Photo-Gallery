@@ -25,13 +25,21 @@
     </nav>
 
     <div class="container my-5">
-        <h2 class="mb-5">New album</h2>
+        <h2 class="mb-5">New Publisher</h2>
         <form method="post">
             <div class="form-group col-md-4">
-                <label class="col-form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title">
+                <label class="col-form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name">
             </div>
-            <button class="btn btn-primary" type="submit">Add album</button>
+            <div class="form-group col-md-4">
+                <label for="label" class="col-form-label">Label</label>
+                <select class="form-control" id="label" name="label">
+                    <option value="professional">Professional</option>
+                    <option value="amateur">Amateur</option>
+                    <option value="artist">Artist</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Add publisher</button>
         </form>
     </div>
 </body>

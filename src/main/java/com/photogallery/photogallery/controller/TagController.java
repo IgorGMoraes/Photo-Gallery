@@ -6,7 +6,7 @@ import com.photogallery.photogallery.model.Tag;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import com.photogallery.photogallery.repository.TagRepository;
-import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.repository.PublisherRepository;
 import com.photogallery.photogallery.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import java.util.Set;
 @Controller
 public class TagController {
     @Autowired
-    private UserRepository userRepository;
+    private PublisherRepository publisherRepository;
 
     @Autowired
     private AlbumRepository albumRepository;
@@ -35,8 +35,8 @@ public class TagController {
     @Autowired
     TagRepository tagRepository;
 
-    @PostMapping("/addPhotoTag/{id}/{idUser}/{idAlbum}")
-    public String addPhotoTag(@PathVariable("id") String id, @PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
+    @PostMapping("/addPhotoTag/{id}/{idPublisher}/{idAlbum}")
+    public String addPhotoTag(@PathVariable("id") String id, @PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + id));
 
         Tag tag = tagRepository.findByName(tagName);
@@ -47,11 +47,11 @@ public class TagController {
         photo.getTags().add(tag);
         photoRepository.save(photo);
 
-        return "redirect:/publishersList/{idUser}/{idAlbum}";
+        return "redirect:/publishersList/{idPublisher}/{idAlbum}";
     }
 
-    @PostMapping("/addAlbumTag/{idUser}/{idAlbum}")
-    public String addAlbumTag(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
+    @PostMapping("/addAlbumTag/{idPublisher}/{idAlbum}")
+    public String addAlbumTag(@PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum, @RequestParam("tagName") String tagName){
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
         Tag tag = tagRepository.findByName(tagName);
@@ -63,7 +63,7 @@ public class TagController {
 
         albumRepository.save(album);
 
-        return "redirect:/publishersList/{idUser}/{idAlbum}";
+        return "redirect:/publishersList/{idPublisher}/{idAlbum}";
     }
 
 }

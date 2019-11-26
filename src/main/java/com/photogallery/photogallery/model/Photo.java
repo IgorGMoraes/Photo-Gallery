@@ -42,7 +42,7 @@ public class Photo {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(mappedBy = "photo", cascade = CascadeType.ALL)
     private Ad ad;
 
     public Photo() {}

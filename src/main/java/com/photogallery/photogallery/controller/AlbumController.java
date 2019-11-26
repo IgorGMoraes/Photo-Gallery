@@ -3,11 +3,11 @@ package com.photogallery.photogallery.controller;
 import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.model.Tag;
-import com.photogallery.photogallery.model.User;
+import com.photogallery.photogallery.model.Publisher;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import com.photogallery.photogallery.repository.TagRepository;
-import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AlbumController {
 
     @Autowired
-    private UserRepository userRepository;
+    private PublisherRepository publisherRepository;
 
     @Autowired
     private AlbumRepository albumRepository;
@@ -31,10 +31,15 @@ public class AlbumController {
     @Autowired
     TagRepository tagRepository;
 
+    @GetMapping("/publishersList/{id}/addAlbum")
+    public String showNewAlbumForm(@PathVariable("id") String id){
+        return "addAlbum";
+    }
+
     @PostMapping("/publishersList/{id}/addAlbum")
     public String addAlbum(@PathVariable("id") String id, Album album){
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        album.setUser(user);
+        Publisher publisher = publisherRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + id));
+        album.setPublisher(publisher);
 
         Tag tag = tagRepository.findByName(album.getTitle());
         if (tag == null){
@@ -46,13 +51,13 @@ public class AlbumController {
         return "redirect:/publishersList/{id}";
     }
 
-    @GetMapping("/publishersList/{idUser}/{idAlbum}")
-    public ModelAndView showPublisherAlbumPage(@PathVariable("idUser") String idUser, @PathVariable("idAlbum") String idAlbum, Model model){
-        User user = userRepository.findById(idUser).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + idUser));
+    @GetMapping("/publishersList/{idPublisher}/{idAlbum}")
+    public ModelAndView showPublisherAlbumPage(@PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum, Model model){
+        Publisher publisher = publisherRepository.findById(idPublisher).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + idPublisher));
         Album album = albumRepository.findById(idAlbum).orElseThrow(() -> new IllegalArgumentException("Invalid album Id:" + idAlbum));
 
         ModelAndView mv = new ModelAndView("publisherAlbum");
-        mv.addObject("user", user);
+        mv.addObject("publisher", publisher);
         mv.addObject("album", album);
 
         Iterable<Photo> photos = photoRepository.findAllByAlbum(album);

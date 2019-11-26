@@ -20,4 +20,6 @@ public interface PhotoRepository extends CrudRepository<Photo, String> {
     Photo findTopFromLastWeek(@Param("albumId") String albumId);
 
     List<Photo> findByTags_Name(String tag);
+
+    Iterable<Photo> findAllByAd_IdIsNullOrderByViewsDesc();
 }

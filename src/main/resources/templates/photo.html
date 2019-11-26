@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <button class="btn btn-outline-light" onclick="history.back()"><i class="fas fa-arrow-left"></i></button>
+    <button class="btn btn-outline-light" onclick="history.back();"><i class="fas fa-arrow-left"></i></button>
     <div class="photo d-flex justify-content-center">
         <div>
             <img
@@ -22,7 +22,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h5 th:text="${#strings.capitalize(photo.album.user.name)}" class="font-weight-bold"></h5>
+                        <h5 th:text="${#strings.capitalize(photo.album.publisher.name)}" class="font-weight-bold"></h5>
                         <h6 th:text="${photo.album.title}"></h6>
                     </div>
                     <div>
@@ -35,7 +35,6 @@
     </div>
 
 
-    <script type="text/javascript" th:src="@{/js/gallery.js}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

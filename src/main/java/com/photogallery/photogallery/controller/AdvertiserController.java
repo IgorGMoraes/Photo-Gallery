@@ -1,12 +1,7 @@
 package com.photogallery.photogallery.controller;
 
-import com.photogallery.photogallery.model.Advertiser;
-import com.photogallery.photogallery.model.Album;
-import com.photogallery.photogallery.model.User;
-import com.photogallery.photogallery.repository.AdRepository;
-import com.photogallery.photogallery.repository.AdvertiserRepository;
-import com.photogallery.photogallery.repository.AlbumRepository;
-import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.model.*;
+import com.photogallery.photogallery.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +19,9 @@ public class AdvertiserController {
     private AdvertiserRepository advertiserRepository;
 
     @Autowired
+    private PhotoRepository photoRepository;
+
+    @Autowired
     private AdRepository adRepository;
 
     @GetMapping("/advertiserSignup")
@@ -32,9 +30,9 @@ public class AdvertiserController {
     }
 
     @PostMapping("/advertiserSignup")
-    public String addUser(Advertiser advertiser){
+    public String addPublisher(Advertiser advertiser){
         advertiserRepository.save(advertiser);
-        return "redirect:/advertiserList";
+        return "redirect:/advertisersList";
     }
 
     @RequestMapping("/advertisersList")
@@ -47,18 +45,44 @@ public class AdvertiserController {
 
     @RequestMapping("/deleteAdvertiser")
     public String deleteAdvertiser(String id) {
-        Advertiser advertiser = advertiserRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        Advertiser advertiser = advertiserRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + id));
         advertiserRepository.delete(advertiser);
         return "redirect:/advertisersList";
     }
 
-    @GetMapping("/advertiserList/{id}")
+    @GetMapping("/advertisersList/{id}")
     public ModelAndView advertiserPage(@PathVariable("id") String id) {
-        Advertiser advertiser = advertiserRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         ModelAndView mv = new ModelAndView("advertiser");
+
+        Advertiser advertiser = advertiserRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid publisher Id:" + id));
         mv.addObject("advertiser", advertiser);
+
+        Iterable<Photo> photos = photoRepository.findAllByAd_IdIsNullOrderByViewsDesc();
+        mv.addObject("photos", photos);
 
         return mv;
     }
 
+    @GetMapping("/advertise/{advertiserId}/{photoId}")
+    public String showAdvertiseForm(@PathVariable("advertiserId") String advertiserId, @PathVariable("photoId") String photoId){
+        return "addAdvertisement";
+    }
+
+    @PostMapping("/advertise/{advertiserId}/{photoId}")
+    public String addAdvertise(@PathVariable("advertiserId") String advertiserId, @PathVariable("photoId") String photoId, Ad ad){
+        Advertiser advertiser = advertiserRepository.findById(advertiserId).orElseThrow(() -> new IllegalArgumentException("Invalid advertiser Id:" + advertiserId));
+        Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new IllegalArgumentException("Invalid photo Id:" + photoId));
+
+        ad.setAdversiterName(advertiser.getName());
+        ad.setAdvertiser(advertiser);
+        ad.setPhoto(photo);
+
+        advertiser.getAds().add(ad);
+        photo.setAd(ad);
+
+        adRepository.save(ad);
+        advertiserRepository.save(advertiser);
+        photoRepository.save(photo);
+        return "redirect:/advertisersList/{advertiserId}";
+    }
 }

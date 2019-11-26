@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
-public class User {
+public class Publisher {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -19,12 +19,14 @@ public class User {
 
     private String label;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private float revenue = 0;
+
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
     private List<Album> albums;
 
-    public User() {}
+    public Publisher() {}
 
-    public User(String id, String name, String label) {
+    public Publisher(String id, String name, String label) {
         this.id = id;
         this.name = name;
         this.label = label;
@@ -52,5 +54,21 @@ public class User {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public float getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(float revenue) {
+        this.revenue = revenue;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 }

@@ -20,7 +20,7 @@ public class Album {
     private int views = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Publisher publisher;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Photo> photos;
@@ -62,12 +62,12 @@ public class Album {
         this.views = views;
     }
 
-    public User getUser() {
-        return user;
+    public Publisher getPublisher() {
+        return publisher;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public List<Photo> getPhoto() {

@@ -21,8 +21,8 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item disabled" href="admin">Administrator</a>
-                <a class="dropdown-item" href="publishersList">Publiser</a>
-                <a class="dropdown-item disabled" href="advertiser">Advertiser</a>
+                <a class="dropdown-item" href="/publishersList">Publiser</a>
+                <a class="dropdown-item" href="/advertisersList">Advertiser</a>
             </div>
         </div>
     </nav>
@@ -33,12 +33,11 @@
         <div class="row d-flex justify-content-center">
             <div class="text-center col-3" th:each="photo : ${photoTrends}">
                 <a th:href="@{/p/{id} (id = ${photo.id})}">
-                    <img class="myImg"
-                         th:src="@{data:{fileType};base64,{data} (fileType = ${photo.fileType}, data = ${photo.data})}"/>
+                    <img class="myImg" th:src="@{data:{fileType};base64,{data} (fileType = ${photo.fileType}, data = ${photo.data})}"/>
                 </a>
                 <div class="d-flex justify-content-between mt-2">
                     <div>
-                        <h6 class="font-weight-bold d-inline" th:text="${photo.album.user.name}"></h6>
+                        <h6 class="font-weight-bold d-inline" th:text="${photo.album.publisher.name}"></h6>
                         <h6 class="text-secondary d-inline ml-2" th:text="${photo.album.title}"></h6>
                     </div>
                     <div>
@@ -58,7 +57,7 @@
                     <img th:src="@{data:{fileType};base64,{data} (fileType = ${photo.fileType}, data = ${photo.data})}"/>
                 </a>
                 <div class="d-flex justify-content-between mt-2">
-                    <h6 class="font-weight-bold" th:text="${photo.album.user.name}"></h6>
+                    <h6 class="font-weight-bold" th:text="${photo.album.publisher.name}"></h6>
                     <div>
                         <i class="fas fa-eye text-secondary d-inline"></i>
                         <h6 class="text-secondary d-inline" th:text="${photo.views}"></h6>

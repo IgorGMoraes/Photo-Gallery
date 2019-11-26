@@ -12,7 +12,7 @@ public class Ad {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    private String adversiter;
+    private String adversiterName;
 
     private float percentageToPublisher;
 
@@ -21,7 +21,7 @@ public class Ad {
     @ManyToOne(fetch = FetchType.LAZY)
     private Advertiser advertiser;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Photo photo;
 
     public Ad() {
@@ -35,12 +35,12 @@ public class Ad {
         this.id = id;
     }
 
-    public String getadversiter() {
-        return adversiter;
+    public String getAdversiterName() {
+        return adversiterName;
     }
 
-    public void setadversiter(String adversiter) {
-        this.adversiter = adversiter;
+    public void setAdversiterName(String adversiterName) {
+        this.adversiterName = adversiterName;
     }
 
     public float getPercentageToPublisher() {
@@ -57,14 +57,6 @@ public class Ad {
 
     public void setPrice(float price) {
         this.price = price;
-    }
-
-    public String getAdversiter() {
-        return adversiter;
-    }
-
-    public void setAdversiter(String adversiter) {
-        this.adversiter = adversiter;
     }
 
     public Advertiser getAdvertiser() {

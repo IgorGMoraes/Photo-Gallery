@@ -11,22 +11,22 @@
 </head>
 <body class="pt-5">
     <nav class="navbar navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand font-weight-bold" href="http://localhost:8080/">Travelers Group</a>
+        <a class="navbar-brand font-weight-bold" href="/">Travelers Group</a>
         <div class="nav-item dropdown">
             <button class="btn btn-outline-primary nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Login
             </button>
             <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item disabled" href="admin">Administrator</a>
-                <a class="dropdown-item" href="publishersList">Publisher</a>
-                <a class="dropdown-item disabled" href="advertiser">Advertiser</a>
+                <a class="dropdown-item" href="/publishersList">Publisher</a>
+                <a class="dropdown-item" href="/advertisersList">Advertiser</a>
             </div>
         </div>
     </nav>
 
     <nav aria-label="breadcrumb" class="mt-2">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="http://localhost:8080/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Advertisers List</li>
         </ol>
     </nav>
@@ -34,9 +34,9 @@
     <div class="container">
 
         <h2 class="my-5">Advertisers</h2>
-        <p class="mt-5"><a href="/advertiserSignup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i> Add user</a></p>
-        <h4 class="text-center" th:if="${#lists.isEmpty(users)}">No users registered</h4>
-        <div th:unless="${#lists.isEmpty(users)}">
+        <p class="mt-5"><a href="/advertiserSignup" class="btn btn-primary"><i class="fas fa-user-plus "></i> Add advertiser</a></p>
+        <h4 class="text-center" th:if="${#lists.isEmpty(advertisers)}">No advertisers registered</h4>
+        <div th:unless="${#lists.isEmpty(advertisers)}">
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
@@ -46,8 +46,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="advertiser : ${advertisers}">
-                    <td><a th:text="${advertiser.name}" th:href="@{/advertiserList/{id}(id = ${advertiser.id})}"></a></td>
-                    <td><a th:href="${(#mvc.url('UC#deleteAdvertiser').arg(0, user.id)).build()}" class="btn btn-danger btn-sm"><i class="fas fa-user-times"></i> Delete</a></td>
+                    <td><a th:text="${advertiser.name}" th:href="@{/advertisersList/{id}(id = ${advertiser.id})}"></a></td>
+                    <td><a th:href="${(#mvc.url('AC#deleteAdvertiser').arg(0, advertiser.id)).build()}" class="btn btn-danger btn-sm"><i class="fas fa-user-times"></i> Delete</a></td>
                 </tr>
                 </tbody>
             </table>

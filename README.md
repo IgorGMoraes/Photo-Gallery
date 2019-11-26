@@ -22,4 +22,4 @@ mvn spring-boot:run
 ```
 
 -  To access the application go to
-<a href="http://localhost:8080" target="_blank">`localhost:8080`</a>
+<a href="" target="_blank">`localhost:8080`</a>

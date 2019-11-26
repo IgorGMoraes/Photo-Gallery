@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Users</title>
+    <title>Publishers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
@@ -11,32 +11,32 @@
 </head>
 <body class="pt-5">
     <nav class="navbar navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand font-weight-bold" href="http://localhost:8080/">Travelers Group</a>
+        <a class="navbar-brand font-weight-bold" href="/">Travelers Group</a>
         <div class="nav-item dropdown">
             <button class="btn btn-outline-primary nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Login
             </button>
             <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item disabled" href="admin">Administrator</a>
-                <a class="dropdown-item" href="publishersList">Publisher</a>
-                <a class="dropdown-item disabled" href="advertiser">Advertiser</a>
+                <a class="dropdown-item" href="/publishersList">Publisher</a>
+                <a class="dropdown-item" href="/advertisersList">Advertiser</a>
             </div>
         </div>
     </nav>
 
     <nav aria-label="breadcrumb" class="mt-2">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="http://localhost:8080/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Publishers List</li>
         </ol>
     </nav>
 
     <div class="container">
 
-        <h2 class="my-5">Users</h2>
-        <p class="mt-5"><a href="/publisherSignup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i> Add user</a></p>
-        <h4 class="text-center" th:if="${#lists.isEmpty(users)}">No users registered</h4>
-        <div th:unless="${#lists.isEmpty(users)}">
+        <h2 class="my-5">Publishers</h2>
+        <p class="mt-5"><a href="/publisherSignup" class="btn btn-primary"><i class="fas fa-user-plus "></i> Add publisher</a></p>
+        <h4 class="text-center" th:if="${#lists.isEmpty(publishers)}">No publishers registered</h4>
+        <div th:unless="${#lists.isEmpty(publishers)}">
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
@@ -46,10 +46,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${users}">
-                    <td><a th:text="${user.name}" th:href="@{/publishersList/{id}(id = ${user.id})}"></a></td>
-                    <td th:text="${#strings.capitalize(user.label)}"></td>
-                    <td><a th:href="${(#mvc.url('UC#deleteUser').arg(0, user.id)).build()}" class="btn btn-danger btn-sm"><i class="fas fa-user-times"></i> Delete</a></td>
+                <tr th:each="publisher : ${publishers}">
+                    <td><a th:text="${publisher.name}" th:href="@{/publishersList/{id}(id = ${publisher.id})}"></a></td>
+                    <td th:text="${#strings.capitalize(publisher.label)}"></td>
+                    <td><a th:href="${(#mvc.url('PC#deletePublisher').arg(0, publisher.id)).build()}" class="btn btn-danger btn-sm"><i class="fas fa-user-times"></i> Delete</a></td>
                 </tr>
                 </tbody>
             </table>

@@ -6,7 +6,7 @@ import com.photogallery.photogallery.model.Tag;
 import com.photogallery.photogallery.repository.AlbumRepository;
 import com.photogallery.photogallery.repository.PhotoRepository;
 import com.photogallery.photogallery.repository.TagRepository;
-import com.photogallery.photogallery.repository.UserRepository;
+import com.photogallery.photogallery.repository.PublisherRepository;
 import com.photogallery.photogallery.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 public class IndexController {
     @Autowired
-    private UserRepository userRepository;
+    private PublisherRepository publisherRepository;
 
     @Autowired
     private AlbumRepository albumRepository;

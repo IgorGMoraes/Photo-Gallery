@@ -9,8 +9,8 @@ body{
 }
 
 img{
-    height: calc(100% - 96px);
     max-width: 100vw;
+    height: calc(100% - 96px);
     object-fit: cover;
 }
 .photo{
