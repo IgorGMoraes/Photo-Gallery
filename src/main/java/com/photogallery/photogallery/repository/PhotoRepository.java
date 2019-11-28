@@ -21,5 +21,7 @@ public interface PhotoRepository extends CrudRepository<Photo, String> {
 
     List<Photo> findByTags_Name(String tag);
 
-    Iterable<Photo> findAllByAd_IdIsNullOrderByViewsDesc();
+    List<Photo> findAllByAd_IdIsNullOrderByViewsDesc();
+
+    List<Photo> findAllByOrderByViewsDesc();
 }

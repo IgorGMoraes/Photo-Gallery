@@ -18,6 +18,8 @@ public class Ad {
 
     private float price;
 
+    private int views = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Advertiser advertiser;
 
@@ -73,5 +75,13 @@ public class Ad {
 
     public void setPhoto(Photo photo) {
         this.photo = photo;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

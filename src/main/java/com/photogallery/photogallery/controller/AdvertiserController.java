@@ -4,12 +4,14 @@ import com.photogallery.photogallery.model.*;
 import com.photogallery.photogallery.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -23,6 +25,9 @@ public class AdvertiserController {
 
     @Autowired
     private AdRepository adRepository;
+
+    @Autowired
+    private AlbumRepository albumRepository;
 
     @GetMapping("/advertiserSignup")
     public String showAdvertiserSignUpForm(){
@@ -84,5 +89,28 @@ public class AdvertiserController {
         advertiserRepository.save(advertiser);
         photoRepository.save(photo);
         return "redirect:/advertisersList/{advertiserId}";
+    }
+
+    @GetMapping("/advertisersList/{id}/reports")
+    public ModelAndView showAdvertiserReports(@PathVariable("id") String id){
+        ModelAndView mv = new ModelAndView("advertiserReports");
+
+        Iterable<Photo> photos = photoRepository.findAllByOrderByViewsDesc();
+        mv.addObject("photos", photos);
+
+        Iterable<Album> albums = albumRepository.findAllByOrderByViewsDesc();
+        mv.addObject("albums", albums);
+
+        List<Object[]> result = advertiserRepository.customQuery(id);
+        List<AdvertiserExpenses> advertiserExpenses = new ArrayList<>();
+        for (Object[] o : result){
+            String title = albumRepository.findTitleById((String)o[1]);
+            AdvertiserExpenses ae = new AdvertiserExpenses((double)o[0], (String)o[1], title);
+            advertiserExpenses.add(ae);
+        }
+
+        mv.addObject("advertiserExpenses", advertiserExpenses);
+
+        return mv;
     }
 }

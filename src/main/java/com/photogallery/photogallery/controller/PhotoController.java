@@ -4,10 +4,7 @@ import com.photogallery.photogallery.model.Album;
 import com.photogallery.photogallery.model.Photo;
 import com.photogallery.photogallery.model.Tag;
 import com.photogallery.photogallery.model.Publisher;
-import com.photogallery.photogallery.repository.AlbumRepository;
-import com.photogallery.photogallery.repository.PhotoRepository;
-import com.photogallery.photogallery.repository.TagRepository;
-import com.photogallery.photogallery.repository.PublisherRepository;
+import com.photogallery.photogallery.repository.*;
 import com.photogallery.photogallery.service.PaymentService;
 import com.photogallery.photogallery.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,9 @@ public class PhotoController {
 
     @Autowired
     PaymentService paymentService;
+
+    @Autowired
+    AdRepository adRepository;
 
     @PostMapping("/publishersList/{idPublisher}/{idAlbum}/addPhoto")
     public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable("idPublisher") String idPublisher, @PathVariable("idAlbum") String idAlbum) {
@@ -73,6 +73,9 @@ public class PhotoController {
 
         if (photo.getAd() != null) {
             paymentService.payPublisher(photo.getAlbum().getPublisher(), photo.getAd().getPercentageToPublisher(), photo.getAd().getPrice());
+            int adViews = photo.getAd().getViews();
+            photo.getAd().setViews(adViews+1);
+            adRepository.save(photo.getAd());
         }
 
         photoRepository.save(photo);
