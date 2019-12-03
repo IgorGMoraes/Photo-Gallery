@@ -9,17 +9,60 @@ Travelers Group is a worldwide organization where professionals and non-professi
 ```
 git clone https://github.com/IgorGMoraes/Photo-Gallery.git
 ```
+<br>
 
--  Install MySQL and create a database called "photogallery"
+- Install <a href="https://docs.docker.com/install/" target="_blank">Docker</a>
+
+<br>
+
+- Pull MySQL image to Docker
 ```
-CREATE DATABASE photogallery;
+docker pull mysql
 ```
 
--  Run the application using maven
-Open the terminal in Photo-Gallery folder and run:
+<br>
+
+- Create network for the project
 ```
-mvn spring-boot:run
+docker network create photogallery
 ```
 
--  To access the application go to
-<a href="" target="_blank">`localhost:8080`</a>
+<br>
+
+- Inside Photo-Gallery directory create .jar file using maven
+```
+mvn package -DskipTests
+```
+
+<br>
+
+- Build the docker image for the project
+```
+docker image build -t photogallery .
+```
+
+<br>
+
+-  Run MySQL database as a container
+```
+docker container run --network photogallery --name mysqldb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=photogallery -d mysql:8
+```
+
+<br>
+
+-  Check if MySQL container is ready
+```
+docker container logs -f mysqldb
+```
+
+<br>
+
+-  Run the application as a container
+```
+docker container run --network photogallery --name photogallery-app -p 8080:8080 -d photogallery
+```
+
+<br>
+
+-  To access the application go to:
+<a href="https://localhost:8080" target="_blank">localhost:8080</a>
